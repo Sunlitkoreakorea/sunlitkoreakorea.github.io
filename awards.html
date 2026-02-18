@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Awards | Lee Seo June</title>
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --text:#0f172a;
+      --muted:#475569;
+      --line: rgba(15,23,42,0.12);
+      --shadow: 0 18px 55px rgba(15,23,42,0.16);
+      --r: 18px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 420px at 12% 10%, rgba(56,189,248,0.18), transparent 60%),
+        radial-gradient(900px 420px at 88% 18%, rgba(168,85,247,0.14), transparent 60%),
+        linear-gradient(180deg, var(--bg), #ffffff);
+    }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width: 1050px; margin: 0 auto; padding: 26px 18px 70px; }
+
+    .topbar{ display:flex; justify-content:space-between; align-items:center; gap:14px; padding: 8px 0 18px; }
+    .brand{ font-weight:900; letter-spacing:0.02em; }
+    .nav{ display:flex; gap:10px; align-items:center; }
+    .navbtn{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.8);
+      color: var(--muted);
+      transition: transform 120ms ease, background 120ms ease;
+    }
+    .navbtn:hover{ transform: translateY(-1px); }
+    .navbtn.active{ color: var(--text); background: rgba(15,23,42,0.04); }
+
+    .panel{
+      border-radius: 22px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.55);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.10);
+      padding: 26px;
+      backdrop-filter: blur(10px) saturate(130%);
+      -webkit-backdrop-filter: blur(10px) saturate(130%);
+    }
+    @media (min-width: 920px){ .panel{ padding: 34px; } }
+
+    h1{ margin:0; font-size: clamp(28px, 4.8vw, 44px); font-weight: 950; letter-spacing: -0.02em; }
+    .sub{ margin: 12px 0 0; color: var(--muted); line-height: 1.65; max-width: 75ch; }
+
+    .award{
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(15,23,42,0.10);
+      background: rgba(255,255,255,0.78);
+    }
+    .award-name{ margin:0 0 8px; font-weight: 900; font-size: 18px; }
+    .award-meta{ margin:0 0 12px; color: var(--muted); line-height: 1.6; }
+    .cta{ display:flex; gap:10px; flex-wrap:wrap; }
+
+    .btn{
+      padding: 11px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.9);
+      cursor:pointer;
+      transition: transform 120ms ease, background 120ms ease;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.primary{ background: rgba(15,23,42,0.06); border-color: rgba(15,23,42,0.16); }
+
+    .glass-overlay{
+      position: fixed;
+      inset: 0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      background: rgba(15,23,42,0.35);
+      z-index: 50;
+    }
+    .glass-overlay.show{ display:flex; }
+
+    .glass{
+      width: min(980px, 96vw);
+      height: min(86vh, 860px);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.38);
+      background:
+        radial-gradient(1100px 420px at 10% 0%, rgba(255,255,255,0.35), transparent 60%),
+        radial-gradient(900px 380px at 90% 15%, rgba(56,189,248,0.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.26), rgba(255,255,255,0.12));
+      backdrop-filter: blur(20px) saturate(170%);
+      -webkit-backdrop-filter: blur(20px) saturate(170%);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      transform: translateY(6px);
+      animation: pop 180ms ease-out forwards;
+    }
+    @keyframes pop{ to{ transform: translateY(0); } }
+
+    .glass-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.28);
+    }
+    .glass-title{ font-weight: 850; }
+    .xbtn{
+      border: 1px solid rgba(255,255,255,0.30);
+      background: rgba(255,255,255,0.14);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+    }
+    .glass-body{
+      height: calc(100% - 54px);
+      padding: 12px;
+    }
+    .pdf{
+      width:100%;
+      height:100%;
+      border-radius: 16px;
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.55);
+      overflow:hidden;
+    }
+    .pdf iframe{ width:100%; height:100%; border:0; display:block; }
+
+    .footer{ margin-top: 18px; color: rgba(15,23,42,0.55); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">Portfolio</div>
+      <div class="nav">
+        <a class="navbtn" href="index.html">Home</a>
+        <a class="navbtn active" href="awards.html">Awards</a>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h1>Awards</h1>
+      <p class="sub">
+        Selected awards and certificates. Click “View Certificate” to open the viewer.
+      </p>
+
+      <div class="award">
+        <p class="award-name">Future Psych Scholars Competition Gold Award</p>
+        <p class="award-meta">Official certificate PDF.</p>
+        <div class="cta">
+          <button class="btn primary" id="viewCert" type="button">View Certificate</button>
+          <a class="btn" href="certificate.pdf" target="_blank" rel="noopener">Open PDF in new tab</a>
+        </div>
+      </div>
+
+      <div class="footer">© 2026 Lee Seo June</div>
+    </div>
+  </div>
+
+  <div class="glass-overlay" id="overlay" role="dialog" aria-modal="true">
+    <div class="glass">
+      <div class="glass-top">
+        <div class="glass-title">Future Psych Scholars Competition Gold Award</div>
+        <button class="xbtn" id="closeOverlay" type="button">Close</button>
+      </div>
+      <div class="glass-body">
+        <div class="pdf">
+          <iframe src="certificate.pdf" title="Certificate PDF"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const overlay = document.getElementById("overlay");
+    const viewCert = document.getElementById("viewCert");
+    const closeOverlay = document.getElementById("closeOverlay");
+
+    function openOverlay(){
+      overlay.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+    function closeIt(){
+      overlay.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    viewCert.addEventListener("click", openOverlay);
+    closeOverlay.addEventListener("click", closeIt);
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) closeIt(); });
+    window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeIt(); });
+  </script>
+</body>
+</html>
