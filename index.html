@@ -3,83 +3,537 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Portfolio | Sunlitkoreakorea</title>
+  <title>Lee Seo June | Portfolio</title>
   <style>
-    :root { --bg:#0b0f17; --card:#121a2a; --text:#e8eefc; --muted:#9fb0d0; --line:#22304a; }
+    :root{
+      --bg:#0b0f17;
+      --bg2:#0a0f18;
+      --card: rgba(255,255,255,0.06);
+      --line: rgba(255,255,255,0.14);
+      --text:#eef3ff;
+      --muted:#b3c0de;
+      --shadow: 0 18px 50px rgba(0,0,0,0.45);
+      --r: 18px;
+    }
     *{ box-sizing:border-box; }
-    body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans KR",sans-serif; background:var(--bg); color:var(--text); }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(140,190,255,0.22), transparent 55%),
+        radial-gradient(900px 700px at 85% 35%, rgba(255,160,220,0.16), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      overflow-x:hidden;
+    }
     a{ color:inherit; text-decoration:none; }
-    .wrap{ max-width:980px; margin:0 auto; padding:28px 18px 60px; }
-    .nav{ display:flex; gap:14px; align-items:center; justify-content:space-between; padding:10px 0 18px; border-bottom:1px solid var(--line); }
-    .nav-left{ display:flex; gap:12px; align-items:center; }
-    .brand{ font-weight:800; letter-spacing:0.02em; }
-    .tabs{ display:flex; gap:12px; }
-    .tab{ padding:8px 10px; border:1px solid var(--line); border-radius:10px; color:var(--muted); }
-    .tab.active{ color:var(--text); border-color:#3a4f7a; background:rgba(58,79,122,0.18); }
 
-    .hero{ padding:26px 0 10px; }
-    .name{ font-size:clamp(38px,6vw,64px); font-weight:900; margin:0; line-height:1.05; }
-    .tag{ margin:10px 0 0; color:var(--muted); font-size:16px; max-width:70ch; }
+    .wrap{
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 28px 18px 70px;
+    }
 
-    .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:18px; }
-    @media (min-width: 860px){ .grid{ grid-template-columns:1.15fr 0.85fr; } }
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      padding: 10px 0 18px;
+    }
+    .brand{
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      opacity: 0.95;
+    }
+    .nav{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .navbtn{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
+      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, color 120ms ease;
+    }
+    .navbtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.06); }
+    .navbtn.active{
+      color: var(--text);
+      border-color: rgba(180,210,255,0.38);
+      background: rgba(180,210,255,0.08);
+    }
 
-    .card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; }
-    h2{ margin:0 0 10px; font-size:18px; }
-    .p{ margin:0; color:var(--muted); line-height:1.55; }
-    .row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
-    .btn{ display:inline-block; padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:rgba(255,255,255,0.03); }
-    .mini{ color:var(--muted); font-size:13px; margin-top:10px; }
-    .footer{ margin-top:24px; color:var(--muted); font-size:13px; }
+    .stage{
+      perspective: 1400px;
+      margin-top: 6px;
+    }
+    .book{
+      position: relative;
+      width: 100%;
+      min-height: 560px;
+      transform-style: preserve-3d;
+    }
+
+    .page{
+      position:absolute;
+      inset:0;
+      border-radius: var(--r);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+
+    .page::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius: calc(var(--r) + 2px);
+      background:
+        radial-gradient(700px 200px at 20% 0%, rgba(255,255,255,0.10), transparent 60%),
+        radial-gradient(600px 250px at 90% 20%, rgba(255,255,255,0.06), transparent 60%);
+      pointer-events:none;
+    }
+
+    .page-inner{
+      position:relative;
+      padding: 30px;
+    }
+
+    .grid{
+      display:grid;
+      gap:18px;
+      align-items:center;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 920px){
+      .grid{ grid-template-columns: 0.95fr 1.05fr; }
+      .page-inner{ padding: 40px; }
+    }
+
+    .photo{
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.03);
+      overflow:hidden;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+      aspect-ratio: 4 / 5;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+
+    .title{
+      margin: 0;
+      font-size: clamp(34px, 6vw, 64px);
+      font-weight: 950;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+    }
+    .subtitle{
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 62ch;
+    }
+
+    .card{
+      margin-top: 18px;
+      padding: 16px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.18);
+    }
+    .label{
+      font-size: 12px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(230,240,255,0.68);
+      margin-bottom: 10px;
+    }
+    .edu{
+      display:grid;
+      gap:10px;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .edu .row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+    }
+    .edu .school{ font-weight: 700; }
+    .edu .status{ color: var(--muted); }
+
+    .cta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 14px;
+    }
+    .btn{
+      padding: 11px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      cursor:pointer;
+      color: var(--text);
+      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.07); }
+    .btn.primary{
+      border-color: rgba(180,210,255,0.42);
+      background: rgba(180,210,255,0.10);
+    }
+
+    .hint{
+      margin-top: 10px;
+      color: rgba(190,205,235,0.75);
+      font-size: 13px;
+    }
+
+    .page.awards{
+      transform: rotateY(180deg);
+    }
+
+    .book.flip-to-awards .home{
+      animation: flipOut 520ms cubic-bezier(.2,.8,.2,1) forwards;
+      transform-origin: left center;
+    }
+    .book.flip-to-awards .awards{
+      animation: flipIn 520ms cubic-bezier(.2,.8,.2,1) forwards;
+      transform-origin: right center;
+    }
+
+    .book.flip-to-home .awards{
+      animation: flipOutBack 520ms cubic-bezier(.2,.8,.2,1) forwards;
+      transform-origin: right center;
+    }
+    .book.flip-to-home .home{
+      animation: flipInBack 520ms cubic-bezier(.2,.8,.2,1) forwards;
+      transform-origin: left center;
+    }
+
+    @keyframes flipOut{
+      from{ transform: rotateY(0deg); }
+      to{ transform: rotateY(-180deg); }
+    }
+    @keyframes flipIn{
+      from{ transform: rotateY(180deg); }
+      to{ transform: rotateY(0deg); }
+    }
+    @keyframes flipOutBack{
+      from{ transform: rotateY(0deg); }
+      to{ transform: rotateY(180deg); }
+    }
+    @keyframes flipInBack{
+      from{ transform: rotateY(-180deg); }
+      to{ transform: rotateY(0deg); }
+    }
+
+    .aw-title{
+      margin: 0;
+      font-size: clamp(28px, 4.8vw, 44px);
+      font-weight: 950;
+      letter-spacing: -0.02em;
+    }
+    .aw-sub{
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 70ch;
+    }
+
+    .award-card{
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.18);
+    }
+    .award-name{
+      font-weight: 900;
+      font-size: 18px;
+      margin: 0 0 8px;
+    }
+    .award-meta{
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .glass-overlay{
+      position: fixed;
+      inset: 0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      background: rgba(0,0,0,0.45);
+      z-index: 50;
+    }
+    .glass-overlay.show{ display:flex; }
+
+    .glass{
+      width: min(980px, 96vw);
+      height: min(86vh, 860px);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background:
+        radial-gradient(1200px 400px at 10% 0%, rgba(255,255,255,0.16), transparent 60%),
+        radial-gradient(900px 350px at 90% 15%, rgba(180,210,255,0.14), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.55);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .glass::after{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background:
+        radial-gradient(600px 220px at 20% 10%, rgba(255,255,255,0.26), transparent 60%),
+        radial-gradient(520px 240px at 90% 18%, rgba(255,255,255,0.16), transparent 60%);
+      pointer-events:none;
+      mix-blend-mode: screen;
+      opacity: 0.65;
+    }
+
+    .glass-top{
+      position:relative;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding: 14px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.14);
+    }
+    .glass-title{
+      font-weight: 850;
+      letter-spacing: -0.01em;
+    }
+    .xbtn{
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.18);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+    }
+
+    .glass-body{
+      position:relative;
+      height: calc(100% - 54px);
+      padding: 12px;
+    }
+    .pdf{
+      width:100%;
+      height:100%;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.18);
+      overflow:hidden;
+    }
+    .pdf iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+    }
+
+    .footer{
+      margin-top: 20px;
+      color: rgba(190,205,235,0.70);
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="nav">
-      <div class="nav-left">
-        <div class="brand">Sunlitkoreakorea</div>
-        <div class="tabs">
-          <a class="tab active" href="index.html">Home</a>
-          <a class="tab" href="awards.html">Awards</a>
-        </div>
-      </div>
-      <a class="tab" href="https://github.com/">GitHub</a>
-    </div>
-
-    <div class="hero">
-      <h1 class="name">SEO JUNE LEE</h1>
-      <p class="tag">
-        Student portfolio. Research interests: psychology, cognitive science, and AI-assisted learning.
-      </p>
-    </div>
-
-    <div class="grid">
-      <div class="card">
-        <h2>About</h2>
-        <p class="p">
-          I build research-driven projects and write clearly about methods, results, and limitations.
-          I like work that connects behavioral science with practical tools.
-        </p>
-        <div class="row">
-          <a class="btn" href="awards.html">View Awards</a>
-          <a class="btn" href="SEO%20JUNE%20LEE-2026%20Future%20Psych%20Scholars%20Competition-2.pdf" target="_blank" rel="noopener">
-            Open Certificate PDF
-          </a>
-        </div>
-        <div class="mini">Tip: add your email and links later.</div>
-      </div>
-
-      <div class="card">
-        <h2>Highlights</h2>
-        <p class="p">Future Psych Scholars Competition: Gold Award.</p>
-        <p class="p" style="margin-top:10px;">Next: add 2–3 projects with short descriptions and links.</p>
-        <div class="row">
-          <a class="btn" href="awards.html">Award details</a>
-        </div>
+    <div class="topbar">
+      <div class="brand">Portfolio</div>
+      <div class="nav">
+        <button class="navbtn active" id="navHome" type="button">Home</button>
+        <button class="navbtn" id="navAwards" type="button">Awards</button>
       </div>
     </div>
 
-    <div class="footer">© 2026 Sunlitkoreakorea</div>
+    <div class="stage">
+      <div class="book" id="book">
+
+        <section class="page home" id="pageHome" aria-label="Home page">
+          <div class="page-inner">
+            <div class="grid">
+              <div class="photo">
+                <img src="profile.jpg" alt="Lee Seo June portrait" />
+              </div>
+
+              <div>
+                <h1 class="title">Lee Seo June</h1>
+                <p class="subtitle">
+                  Clean, research-focused portfolio. Psychology, cognitive science, and AI-assisted learning.
+                </p>
+
+                <div class="card">
+                  <div class="label">Education</div>
+                  <div class="edu">
+                    <div class="row">
+                      <div class="school">Oma Elementary School</div>
+                      <div class="status">Graduate</div>
+                    </div>
+                    <div class="row">
+                      <div class="school">Oma Middle School</div>
+                      <div class="status">Graduate</div>
+                    </div>
+                    <div class="row">
+                      <div class="school">Korean Minjok Leadership Academy</div>
+                      <div class="status">Currently Enrolled</div>
+                    </div>
+                  </div>
+
+                  <div class="cta">
+                    <button class="btn primary" id="goAwards" type="button">Go to Awards</button>
+                    <a class="btn" href="https://github.com/Sunlitkoreakorea" target="_blank" rel="noopener">GitHub Profile</a>
+                  </div>
+
+                  <div class="hint">
+                    If your photo does not appear, check the file name: profile.jpg
+                  </div>
+                </div>
+
+                <div class="footer">© 2026 Lee Seo June</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page awards" id="pageAwards" aria-label="Awards page">
+          <div class="page-inner">
+            <h2 class="aw-title">Awards</h2>
+            <p class="aw-sub">
+              Selected awards and certificates. Click “View Certificate” to open a glass-style viewer.
+            </p>
+
+            <div class="award-card">
+              <p class="award-name">Future Psych Scholars Competition Gold Award</p>
+              <p class="award-meta">
+                Official certificate available as a PDF.
+              </p>
+
+              <div class="cta">
+                <button class="btn primary" id="viewCert" type="button">View Certificate</button>
+                <a class="btn" href="certificate.pdf" target="_blank" rel="noopener">Open PDF in new tab</a>
+                <button class="btn" id="backHome" type="button">Back to Home</button>
+              </div>
+
+              <div class="hint">
+                If the PDF does not load, confirm the file name: certificate.pdf
+              </div>
+            </div>
+
+            <div class="footer">© 2026 Lee Seo June</div>
+          </div>
+        </section>
+
+      </div>
+    </div>
   </div>
+
+  <div class="glass-overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Certificate viewer">
+    <div class="glass">
+      <div class="glass-top">
+        <div class="glass-title">Future Psych Scholars Competition Gold Award</div>
+        <button class="xbtn" id="closeOverlay" type="button">Close</button>
+      </div>
+      <div class="glass-body">
+        <div class="pdf">
+          <iframe src="certificate.pdf" title="Certificate PDF"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const book = document.getElementById("book");
+    const navHome = document.getElementById("navHome");
+    const navAwards = document.getElementById("navAwards");
+    const goAwards = document.getElementById("goAwards");
+    const backHome = document.getElementById("backHome");
+
+    const overlay = document.getElementById("overlay");
+    const viewCert = document.getElementById("viewCert");
+    const closeOverlay = document.getElementById("closeOverlay");
+
+    let page = "home";
+    let animating = false;
+
+    function setActive(){
+      navHome.classList.toggle("active", page === "home");
+      navAwards.classList.toggle("active", page === "awards");
+    }
+
+    function flipTo(next){
+      if (animating || next === page) return;
+      animating = true;
+
+      book.classList.remove("flip-to-home", "flip-to-awards");
+
+      if (next === "awards"){
+        book.classList.add("flip-to-awards");
+      } else {
+        book.classList.add("flip-to-home");
+      }
+
+      setTimeout(() => {
+        page = next;
+        setActive();
+        book.classList.remove("flip-to-home", "flip-to-awards");
+        animating = false;
+      }, 560);
+    }
+
+    navHome.addEventListener("click", () => flipTo("home"));
+    navAwards.addEventListener("click", () => flipTo("awards"));
+    goAwards.addEventListener("click", () => flipTo("awards"));
+    backHome.addEventListener("click", () => flipTo("home"));
+
+    function openOverlay(){
+      overlay.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+    function closeIt(){
+      overlay.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    viewCert.addEventListener("click", openOverlay);
+    closeOverlay.addEventListener("click", closeIt);
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) closeIt(); });
+    window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeIt(); });
+
+    setActive();
+  </script>
 </body>
 </html>
