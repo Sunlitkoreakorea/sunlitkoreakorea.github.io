@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Test Page</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #0b0f17;
+      display: grid;
+      place-items: center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif;
+    }
+
+    .rainbow-glow {
+      font-size: clamp(48px, 10vw, 120px);
+      font-weight: 900;
+      letter-spacing: 0.02em;
+
+      background: linear-gradient(
+        90deg,
+        #ff004c,
+        #ff8a00,
+        #ffee00,
+        #00ff7b,
+        #00c3ff,
+        #7a00ff,
+        #ff00c8,
+        #ff004c
+      );
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+
+      animation: rainbowShift 2.8s linear infinite;
+
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.25));
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.18);
+    }
+
+    .rainbow-glow::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: blur(14px);
+      opacity: 0.85;
+      z-index: -1;
+      animation: rainbowShift 2.8s linear infinite;
+    }
+
+    .wrap {
+      position: relative;
+      padding: 24px 32px;
+    }
+
+    .pulse {
+      animation: pulseGlow 1.7s ease-in-out infinite;
+    }
+
+    @keyframes rainbowShift {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(255,255,255,0.25)) drop-shadow(0 0 24px rgba(0,195,255,0.18)); }
+      50%      { filter: drop-shadow(0 0 14px rgba(255,255,255,0.35)) drop-shadow(0 0 44px rgba(255,0,200,0.22)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="rainbow-glow pulse" data-text="김민찬병신">김민찬병신</div>
+  </div>
+</body>
+</html>
