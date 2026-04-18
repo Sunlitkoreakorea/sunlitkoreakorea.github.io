@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AP Microeconomics Study App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { margin: 0; }
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+  </style>
+</head>
+<body class="bg-slate-50">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const Icon = ({ symbol, className = "" }) => (
+      <span className={className} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{symbol}</span>
+    );
+
+    const BookOpen = (props) => <Icon {...props} symbol="📘" />;
+    const Trophy = (props) => <Icon {...props} symbol="🏆" />;
+    const RotateCcw = (props) => <Icon {...props} symbol="🔄" />;
+    const Clock = (props) => <Icon {...props} symbol="⏱️" />;
+    const ChevronLeft = (props) => <Icon {...props} symbol="←" />;
+    const ChevronRight = (props) => <Icon {...props} symbol="→" />;
+    const FileText = (props) => <Icon {...props} symbol="📄" />;
+    const Download = (props) => <Icon {...props} symbol="⬇️" />;
+    const Lightbulb = (props) => <Icon {...props} symbol="💡" />;
+    const X = (props) => <Icon {...props} symbol="✕" />;
+    const CheckCircle2 = (props) => <Icon {...props} symbol="✓" />;
+    const AlertCircle = (props) => <Icon {...props} symbol="⚠️" />;
+    const Loader2 = (props) => <Icon {...props} symbol="⏳" />;
+
+    const vocabulary = [
+      { term: "Scarcity", definition: "The limited nature of society's resources, which means that society cannot produce all the goods and services people wish to have." },
+      { term: "Microeconomics", definition: "The study of how households and firms make decisions and how they interact in markets." },
+      { term: "Macroeconomics", definition: "The study of economy-wide phenomena, including inflation, unemployment, and economic growth." },
+      { term: "Opportunity Cost", definition: "Whatever must be given up to obtain some item; the value of the next best alternative." },
+      { term: "Marginal Change", definition: "A small incremental adjustment to a plan of action." },
+      { term: "Incentive", definition: "Something that induces a person to act, such as the prospect of a punishment or a reward." },
+      { term: "Market Failure", definition: "A situation in which a market left on its own fails to allocate resources efficiently." },
+      { term: "Externality", definition: "The impact of one person's actions on the well-being of a bystander (e.g., pollution)." },
+      { term: "Market Power", definition: "The ability of a single economic actor (or small group of actors) to have a substantial influence on market prices." },
+      { term: "GDP", definition: "Gross Domestic Product; the market value of all final goods and services produced within a country in a given period of time." },
+      { term: "Inflation", definition: "An increase in the overall level of prices in the economy." },
+      { term: "Phillips Curve", definition: "A curve that shows the short-run trade-off between inflation and unemployment." },
+      { term: "Efficiency", definition: "The property of society getting the most it can from its scarce resources." },
+      { term: "Equity", definition: "The property of distributing economic prosperity uniformly among the members of society." },
+      { term: "Invisible Hand", definition: "Adam Smith's concept that individuals acting in their own self-interest can lead to a desirable market outcome." }
+    ];
+
+    const questionSets = [
+      {
+        id: 1,
+        title: "Set 1: Basic Concepts & 10 Principles",
+        questions: [
+          {
+            id: 1,
+            question: "Which of the following best describes the concept of scarcity in a modern economy?",
+            options: [
+              "A condition where there is not enough money to buy luxury goods.",
+              "The fact that human wants are limited while resources are infinite.",
+              "The fundamental tension between limited resources and unlimited human wants.",
+              "A temporary shortage of a specific commodity like oil or wheat."
+            ],
+            answer: 2,
+            explanation: "Scarcity is the fundamental economic problem where resources (land, labor, capital) are finite, but human desires for goods and services are infinite."
+          },
+          {
+            id: 2,
+            question: "An individual decides to spend 2 hours studying for an AP exam instead of working at a part-time job that pays $15 per hour. What is the opportunity cost of studying?",
+            options: [
+              "The knowledge gained from studying.",
+              "The $30 of income that could have been earned.",
+              "The cost of the textbook and study materials.",
+              "Zero, because education is an investment in human capital."
+            ],
+            answer: 1,
+            explanation: "Opportunity cost is the value of the next best alternative foregone. Since the person gave up 2 hours of work at $15/hr, the cost is $30."
+          },
+          {
+            id: 3,
+            question: "Microeconomics differs from Macroeconomics because Microeconomics focuses on:",
+            options: [
+              "National income and the general price level.",
+              "The behavior of individual consumers, firms, and specific markets.",
+              "Government policies to reduce the unemployment rate.",
+              "The total value of all final goods produced in a country (GDP)."
+            ],
+            answer: 1,
+            explanation: "Microeconomics looks at 'small' units—individuals and firms—while macroeconomics looks at the 'big picture'—national aggregates."
+          },
+          {
+            id: 4,
+            question: "According to the 10 Principles of Economics, 'Rational people think at the margin' means that individuals:",
+            options: [
+              "Only care about the total cost of an action.",
+              "Make decisions by comparing the additional benefit and the additional cost of an action.",
+              "Ignore small changes and focus on major life decisions.",
+              "Always choose the option with the lowest absolute cost."
+            ],
+            answer: 1,
+            explanation: "Marginal thinking involves comparing Marginal Benefit (MB) and Marginal Cost (MC) for incremental adjustments."
+          },
+          {
+            id: 5,
+            question: "A government policy intended to redistribute income from the rich to the poor is primarily an attempt to improve:",
+            options: ["Efficiency.", "Market Power.", "Equity.", "Productivity."],
+            answer: 2,
+            explanation: "Equity refers to fairness in distribution, whereas efficiency refers to maximizing the size of the 'economic pie'."
+          },
+          {
+            id: 6,
+            question: "Which of the following is an example of an incentive?",
+            options: [
+              "A law requiring everyone to wear seatbelts.",
+              "A subsidy that lowers the price of electric vehicles.",
+              "A high tax on cigarettes to discourage smoking.",
+              "All of the above are incentives."
+            ],
+            answer: 3,
+            explanation: "Incentives are anything (rewards or punishments) that induce people to act. Subsidies, taxes, and laws all change the cost-benefit analysis for individuals."
+          },
+          {
+            id: 7,
+            question: "The 'Invisible Hand' theory suggests that in a market economy, self-interest:",
+            options: [
+              "Always leads to chaos and greed.",
+              "Requires heavy government regulation to be beneficial.",
+              "Leads to an efficient allocation of resources without central planning.",
+              "Is only beneficial if people are altruistic."
+            ],
+            answer: 2,
+            explanation: "Adam Smith's 'Invisible Hand' explains how the pursuit of individual self-interest in a free market often promotes the social interest (efficiency)."
+          },
+          {
+            id: 8,
+            question: "Market failure occurs when:",
+            options: [
+              "Prices are too high for consumers to afford.",
+              "A firm goes bankrupt due to bad management.",
+              "The market fails to allocate resources efficiently on its own.",
+              "The government intervenes in the market with taxes."
+            ],
+            answer: 2,
+            explanation: "Market failure is defined as a situation where the market, left to itself, does not reach an efficient outcome (e.g., externalities or market power)."
+          },
+          {
+            id: 9,
+            question: "If a chemical factory's production causes pollution that affects the health of nearby residents, this is an example of:",
+            options: ["Market Power.", "A positive externality.", "A negative externality.", "Comparative advantage."],
+            answer: 2,
+            explanation: "A negative externality occurs when an activity imposes a cost on a third party who was not involved in the transaction."
+          },
+          {
+            id: 10,
+            question: "The Phillips Curve illustrates the short-run trade-off between:",
+            options: ["Interest rates and GDP growth.", "Efficiency and Equity.", "Inflation and Unemployment.", "Exports and Imports."],
+            answer: 2,
+            explanation: "The Phillips Curve shows that in the short run, policies intended to reduce unemployment often lead to higher inflation, and vice versa."
+          },
+          { id: 11, question: "Which field blends psychology and economics to explain 'irrational' choices?", options: ["Game Theory", "Behavioral Economics", "Neuroeconomics", "Macroeconomics"], answer: 1, explanation: "Behavioral economics incorporates psychological insights to understand human decision-making." },
+          { id: 12, question: "The primary determinant of a country's standard of living is its:", options: ["Minimum wage laws", "Tax rates", "Ability to produce goods and services (Productivity)", "Amount of gold reserves"], answer: 2, explanation: "Standard of living depends on productivity—the amount of goods/services produced per hour of work." },
+          { id: 13, question: "Inflation is primarily caused by:", options: ["High interest rates", "Excessive printing of money by the government", "A decrease in the price of oil", "Too much competition among firms"], answer: 1, explanation: "Principle 9 states that prices rise when the government prints too much money." },
+          { id: 14, question: "In a 'Constant-cost, perfectly competitive market', a firm is a:", options: ["Price setter", "Price taker", "Monopolist", "Strategic player"], answer: 1, explanation: "Perfectly competitive firms must take the market price as given." },
+          { id: 15, question: "Which is a 'microeconomic' question?", options: ["What is the national unemployment rate?", "How much should a firm like Netflix charge for its service?", "Is the US GDP growing?", "What causes nationwide inflation?"], answer: 1, explanation: "Specific firm decisions (Netflix pricing) are microeconomic topics." },
+          { id: 16, question: "Trade between countries usually:", options: ["Benefits one country at the expense of another", "Makes both countries better off by allowing specialization", "Should be avoided to protect local jobs", "Reduces the variety of goods available"], answer: 1, explanation: "Trade allows countries to specialize in what they do best, increasing total output." },
+          { id: 17, question: "Which is a 'marginal change'?", options: ["Deciding to quit your job and move to another country", "Choosing to study for one extra hour tonight", "A company building a massive new factory", "The government changing its entire political system"], answer: 1, explanation: "Marginal changes are small, incremental adjustments." },
+          { id: 18, question: "An example of market power is:", options: ["A small wheat farmer in a huge market", "A single utility company providing water to a whole city", "A consumer choosing between Pepsi and Coke", "A street food vendor in a busy park"], answer: 1, explanation: "Market power is the ability to influence price; a monopoly (single utility) has significant market power." },
+          { id: 19, question: "Economic models are:", options: ["Useless because they simplify reality", "Perfect representations of every detail of the economy", "Simplified versions of reality used to understand complex relationships", "Only used by Macroeconomists"], answer: 2, explanation: "Models simplify the world to help us focus on key variables and mechanisms." },
+          { id: 20, question: "Which of the following is NOT one of the 10 Principles of Economics?", options: ["People face trade-offs", "Markets are usually a good way to organize economic activity", "Government should always set the prices of goods", "People respond to incentives"], answer: 2, explanation: "Principle 6 says markets are usually good, but Principle 7 notes governments sometimes improve outcomes; setting all prices is not a principle." }
+        ]
+      },
+      {
+        id: 2,
+        title: "Set 2: Advanced Applications",
+        questions: [
+          { id: 1, question: "If the marginal benefit of eating a third slice of pizza is $4 and the marginal cost is $5, a rational person should:", options: ["Eat the third slice anyway to not waste food.", "Not eat the third slice.", "Eat the slice and ask for a refund.", "Wait until the marginal cost drops to $0."], answer: 1, explanation: "A rational person acts only if MB >= MC. Here, MC ($5) > MB ($4), so they should not eat the slice." },
+          { id: 2, question: "When the government implements a 'cap and trade' system to reduce CO2 emissions, it is addressing:", options: ["Equity concerns.", "Market power of energy firms.", "A negative externality.", "A positive externality."], answer: 2, explanation: "Pollution is a negative externality; government intervention through market-based policies aims to correct this failure." },
+          { id: 3, question: "If productivity increases in the automotive industry, we expect the country's standard of living to:", options: ["Decrease because robots take jobs.", "Increase because more goods can be produced with the same resources.", "Stay the same if the population also grows.", "Decrease because cars cause pollution."], answer: 1, explanation: "Standard of living is tied directly to productivity." },
+          { id: 4, question: "Adam can produce 28 gallons of milk or 84 loaves of bread. Bob can produce 84 gallons of milk or 112 loaves of bread. Who has the absolute advantage in bread?", options: ["Adam", "Bob", "Both", "Neither"], answer: 1, explanation: "Absolute advantage is producing more with the same resources. Bob (112) > Adam (84)." },
+          { id: 5, question: "Regarding the previous question, what is Adam's opportunity cost of producing 1 gallon of milk?", options: ["3 loaves of bread", "1/3 loaf of bread", "84 loaves of bread", "4 loaves of bread"], answer: 0, explanation: "84 bread / 28 milk = 3 bread per milk." },
+          { id: 6, question: "Which scenario represents 'Equity' over 'Efficiency'?", options: ["Allowing markets to determine prices based on supply and demand.", "Implementing a progressive income tax to reduce wealth inequality.", "Eliminating all trade barriers to maximize total output.", "Allowing monopolies to operate freely to encourage innovation."], answer: 1, explanation: "Taxation for redistribution prioritizes fairness (equity) even if it might slightly reduce work incentives (efficiency)." },
+          { id: 7, question: "A 'Laissez-faire' approach to the economy aligns most closely with which principle?", options: ["Principle 7: Governments can sometimes improve market outcomes.", "Principle 6: Markets are usually a good way to organize economic activity.", "Principle 9: Prices rise when money is printed.", "Principle 10: The inflation-unemployment trade-off."], answer: 1, explanation: "Laissez-faire (leave it alone) advocates for minimal intervention, trusting the market mechanism." },
+          { id: 8, question: "In the short run, if the central bank increases the money supply to stimulate the economy, what is the likely result according to the Phillips Curve?", options: ["Inflation increases and unemployment increases.", "Inflation decreases and unemployment decreases.", "Inflation increases and unemployment decreases.", "No change in either variable."], answer: 2, explanation: "More money stimulates spending, which reduces unemployment but puts upward pressure on prices (inflation)." },
+          { id: 9, question: "Why might a rational gambler lose money in the long run?", options: ["They are not rational.", "The marginal cost of gambling is always zero.", "They prioritize the immediate thrill (psychological utility) over long-term financial gain.", "Economics cannot explain gambling."], answer: 2, explanation: "Rationality includes preferences; if the 'thrill' (MB) exceeds the expected financial loss (MC), the choice is 'rational' in an economic sense." },
+          { id: 10, question: "Which of the following is NOT a condition of a 'Perfectly Competitive Market'?", options: ["Many buyers and sellers.", "Differentiated (unique) products.", "Free entry and exit.", "Perfect information."], answer: 1, explanation: "PC markets require homogeneous (identical) products." },
+          { id: 11, question: "GDP measures two things at once: total income and...", options: ["Total population", "Total tax revenue", "Total expenditure on the economy's output", "Total gold reserves"], answer: 2, explanation: "In a circular flow, income must equal expenditure." },
+          { id: 12, question: "An externality is a 'spillover' effect. Education is often cited as a:", options: ["Negative externality", "Positive externality", "Market power", "Scarcity problem"], answer: 1, explanation: "An educated person benefits others (e.g., better citizens, innovation), which is a positive externality." },
+          { id: 13, question: "When we say 'Trade can make everyone better off', we mean:", options: ["Everyone gets exactly the same amount of money", "The total size of the economic pie increases through specialization", "Trade is a zero-sum game", "Only rich countries benefit"], answer: 1, explanation: "Specialization based on comparative advantage increases total global production." },
+          { id: 14, question: "Macroeconomics would be most interested in:", options: ["The price of eggs in Seoul", "The hiring decisions of a tech startup", "The causes of the 2008 global financial crisis", "How a consumer chooses between two brands of milk"], answer: 2, explanation: "Global crises are large-scale, economy-wide phenomena." },
+          { id: 15, question: "Principle 1 states 'People face trade-offs'. For a society, a major trade-off is between:", options: ["Guns and Butter", "Efficiency and Equity", "Work and Leisure", "All of the above"], answer: 3, explanation: "Societies face many trade-offs, including defense vs. consumer goods and fairness vs. productivity." },
+          { id: 16, question: "A 'Market' is:", options: ["A physical building where people shout prices", "A group of buyers and sellers of a particular good or service", "Always controlled by the government", "A place where only cash is used"], answer: 1, explanation: "A market is defined by the interaction of supply and demand for a specific good." },
+          { id: 17, question: "Which is most likely to cause a 'market failure'?", options: ["Intense competition between many small firms", "A single large firm having 'market power' to set prices", "Consumers having perfect information", "Low transaction costs"], answer: 1, explanation: "Market power (monopoly) prevents the price from reflecting true costs/benefits, leading to inefficiency." },
+          { id: 18, question: "The study of how the brain activity influences choices is called:", options: ["Psychology", "Neuroeconomics", "Behavioral Economics", "Microbiology"], answer: 1, explanation: "Neuroeconomics specifically looks at the biological/brain processes in decision-making." },
+          { id: 19, question: "If the government prints money at a rate of 20% per year while output grows at only 2%, what is likely?", options: ["Deflation", "High inflation", "Stability", "Recession"], answer: 1, explanation: "Money growth exceeding output growth leads to inflation." },
+          { id: 20, question: "Economics is primarily the study of...", options: ["How to make the most money in the stock market", "How society manages its scarce resources", "The physical properties of goods", "Political systems"], answer: 1, explanation: "The central definition of economics is the study of resource allocation under scarcity." }
+        ]
+      }
+    ];
+
+    function App() {
+      const [view, setView] = useState('main');
+      const [currentSet, setCurrentSet] = useState(null);
+      const [currentQIndex, setCurrentQIndex] = useState(0);
+      const [selectedAnswers, setSelectedAnswers] = useState({});
+      const [notes, setNotes] = useState('');
+      const [timer, setTimer] = useState(0);
+      const [timerActive, setTimerActive] = useState(false);
+      const [score, setScore] = useState(0);
+      const [wrongQuestions, setWrongQuestions] = useState([]);
+      const [flashcardIndex, setFlashcardIndex] = useState(0);
+      const [isFlipped, setIsFlipped] = useState(false);
+      const [isJsPdfLoaded, setIsJsPdfLoaded] = useState(false);
+      const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
+      useEffect(() => {
+        const script1 = document.createElement('script');
+        script1.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        script1.async = true;
+        const script2 = document.createElement('script');
+        script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        script2.async = true;
+        let loadedCount = 0;
+        const checkLoaded = () => {
+          loadedCount += 1;
+          if (loadedCount === 2) setIsJsPdfLoaded(true);
+        };
+        script1.onload = checkLoaded;
+        script2.onload = checkLoaded;
+        document.body.appendChild(script1);
+        document.body.appendChild(script2);
+        return () => {
+          if (document.body.contains(script1)) document.body.removeChild(script1);
+          if (document.body.contains(script2)) document.body.removeChild(script2);
+        };
+      }, []);
+
+      useEffect(() => {
+        let interval;
+        if (timerActive) {
+          interval = setInterval(() => setTimer(prev => prev + 1), 1000);
+        }
+        return () => clearInterval(interval);
+      }, [timerActive]);
+
+      const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      };
+
+      const startTest = (set) => {
+        setCurrentSet(set);
+        setCurrentQIndex(0);
+        setSelectedAnswers({});
+        setTimer(0);
+        setTimerActive(true);
+        setNotes('');
+        setView('test');
+      };
+
+      const handleAnswer = (optionIdx) => {
+        setSelectedAnswers({ ...selectedAnswers, [currentQIndex]: optionIdx });
+      };
+
+      const submitTest = () => {
+        setTimerActive(false);
+        let currentScore = 100;
+        let wrong = [];
+        currentSet.questions.forEach((q, idx) => {
+          if (selectedAnswers[idx] !== q.answer) {
+            currentScore -= 5;
+            wrong.push({ ...q, userSelection: selectedAnswers[idx] });
+          }
+        });
+        setScore(currentScore);
+        setWrongQuestions(wrong);
+        setCurrentQIndex(0);
+        setView('result');
+      };
+
+      const exportWrongAnswersPDF = async () => {
+        if (!isJsPdfLoaded || !window.jspdf || !window.html2canvas) {
+          alert('PDF library is not loaded yet.');
+          return;
+        }
+        setIsGeneratingPdf(true);
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF('l', 'mm', 'a4');
+          const elements = document.querySelectorAll('.pdf-page-render');
+          if (!elements.length) {
+            alert('There are no incorrect answers to export.');
+            setIsGeneratingPdf(false);
+            return;
+          }
+          for (let i = 0; i < elements.length; i++) {
+            const el = elements[i];
+            const canvas = await window.html2canvas(el, { scale: 2, useCORS: true });
+            const imgData = canvas.toDataURL('image/png');
+            const pdfWidth = doc.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            if (i > 0) doc.addPage();
+            doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+          }
+          doc.save('AP_Micro_Incorrect_Answers.pdf');
+        } catch (error) {
+          console.error(error);
+          alert('PDF generation failed.');
+        } finally {
+          setIsGeneratingPdf(false);
+        }
+      };
+
+      const MainMenu = () => (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 p-6">
+          <div className="max-w-md w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+            <div className="bg-indigo-600 p-8 text-white text-center">
+              <BookOpen className="w-16 h-16 mx-auto mb-4 opacity-90 text-5xl" />
+              <h1 className="text-3xl font-bold">AP Microeconomics</h1>
+              <p className="text-indigo-100 mt-2">10 Principles of Economics & Intro</p>
+            </div>
+            <div className="p-8 space-y-4">
+              <button onClick={() => setView('test_select')} className="w-full flex items-center justify-between p-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-2xl transition-all group">
+                <div className="flex items-center gap-3">
+                  <Trophy className="w-6 h-6 text-xl" />
+                  <span className="font-semibold">Take Practice Exam</span>
+                </div>
+                <ChevronRight className="w-5 h-5 text-lg group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button onClick={() => setView('glossary')} className="w-full flex items-center justify-between p-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-2xl transition-all group">
+                <div className="flex items-center gap-3">
+                  <FileText className="w-6 h-6 text-xl" />
+                  <span className="font-semibold">Vocabulary Glossary</span>
+                </div>
+                <ChevronRight className="w-5 h-5 text-lg group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button onClick={() => setView('flashcards')} className="w-full flex items-center justify-between p-4 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-2xl transition-all group">
+                <div className="flex items-center gap-3">
+                  <RotateCcw className="w-6 h-6 text-xl" />
+                  <span className="font-semibold">Flashcards Study</span>
+                </div>
+                <ChevronRight className="w-5 h-5 text-lg group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+          <p className="mt-8 text-slate-400 text-sm">Instructor: Chang Geun Song</p>
+        </div>
+      );
+
+      const TestSelect = () => (
+        <div className="min-h-screen bg-slate-50 p-6 flex flex-col items-center">
+          <div className="max-w-2xl w-full">
+            <button onClick={() => setView('main')} className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 mb-6 transition-colors">
+              <ChevronLeft className="w-5 h-5 text-lg" /> Back to menu
+            </button>
+            <h2 className="text-2xl font-bold text-slate-800 mb-8">Select Practice Set</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {questionSets.map(set => (
+                <div key={set.id} className="bg-white p-6 rounded-3xl shadow-md border border-slate-100 hover:border-indigo-300 transition-all cursor-pointer" onClick={() => startTest(set)}>
+                  <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mb-4 text-2xl">
+                    <FileText className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-800">{set.title}</h3>
+                  <p className="text-slate-500 text-sm mt-2">20 Questions • 100 Points</p>
+                  <div className="mt-6 text-indigo-600 font-semibold flex items-center gap-1">
+                    Start Exam <ChevronRight className="w-4 h-4 text-base" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+
+      const TestView = () => {
+        const q = currentSet.questions[currentQIndex];
+        const progress = ((currentQIndex + 1) / currentSet.questions.length) * 100;
+        return (
+          <div className="flex h-screen bg-white">
+            <div className="flex-1 flex flex-col relative min-w-0">
+              <div className="p-4 flex items-center justify-between border-b border-slate-100 gap-4">
+                <button onClick={() => { if (confirm('Are you sure? Progress will be lost.')) setView('main'); }} className="text-slate-400 hover:text-red-500 text-xl">
+                  <X className="w-6 h-6" />
+                </button>
+                <div className="flex items-center gap-4 flex-wrap justify-center">
+                  <span className="text-slate-400 text-sm font-medium">Question {currentQIndex + 1} of {currentSet.questions.length}</span>
+                  <div className="flex items-center gap-2 text-indigo-600 font-mono text-lg bg-indigo-50 px-3 py-1 rounded-lg">
+                    <Clock className="w-4 h-4" />
+                    {formatTime(timer)}
+                  </div>
+                </div>
+                <div className="w-24"></div>
+              </div>
+              <div className="h-1.5 bg-slate-100 w-full overflow-hidden">
+                <div className="h-full bg-indigo-600 transition-all duration-300" style={{ width: `${progress}%` }}></div>
+              </div>
+              <div className="flex-1 overflow-y-auto p-8 md:p-12 lg:p-20">
+                <div className="max-w-3xl mx-auto">
+                  <p className="text-indigo-600 font-bold uppercase tracking-widest text-xs mb-4">Multiple Choice Question</p>
+                  <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-12 leading-tight">{q.question}</h2>
+                  <div className="space-y-4">
+                    {q.options.map((opt, idx) => (
+                      <button key={idx} onClick={() => handleAnswer(idx)} className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 group ${selectedAnswers[currentQIndex] === idx ? 'border-indigo-600 bg-indigo-50 shadow-sm' : 'border-slate-100 hover:border-indigo-200'}`}>
+                        <div className={`w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center font-bold transition-colors ${selectedAnswers[currentQIndex] === idx ? 'bg-indigo-600 text-white' : 'bg-slate-50 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-400'}`}>{idx + 1}</div>
+                        <span className={`text-lg ${selectedAnswers[currentQIndex] === idx ? 'text-indigo-900 font-medium' : 'text-slate-600'}`}>{opt}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="p-8 border-t border-slate-50 flex justify-between max-w-3xl mx-auto w-full gap-4">
+                <button disabled={currentQIndex === 0} onClick={() => setCurrentQIndex(prev => prev - 1)} className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-slate-400 hover:text-indigo-600 disabled:opacity-30">
+                  <ChevronLeft className="w-5 h-5" /> Previous
+                </button>
+                {currentQIndex === currentSet.questions.length - 1 ? (
+                  <button onClick={submitTest} className="bg-indigo-600 text-white px-10 py-3 rounded-xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all">Submit Exam</button>
+                ) : (
+                  <button onClick={() => setCurrentQIndex(prev => prev + 1)} className="flex items-center gap-2 bg-indigo-50 text-indigo-600 px-8 py-3 rounded-xl font-bold hover:bg-indigo-100 transition-all">
+                    Next <ChevronRight className="w-5 h-5" />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="w-80 border-l border-slate-100 bg-slate-50/50 flex-col p-6 hidden lg:flex">
+              <div className="flex items-center gap-2 text-slate-800 font-bold mb-4">
+                <FileText className="w-5 h-5 text-indigo-600" />
+                메모장 <span className="text-slate-400 font-normal text-xs">(자동 저장 아님)</span>
+              </div>
+              <textarea className="flex-1 w-full bg-white border border-slate-200 rounded-2xl p-4 text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-100 resize-none shadow-sm" placeholder="여기에 계산이나 노트를 작성하세요..." value={notes} onChange={(e) => setNotes(e.target.value)} />
+            </div>
+          </div>
+        );
+      };
+
+      const ResultView = () => (
+        <div className="min-h-screen bg-slate-50 p-6 flex flex-col items-center justify-center">
+          <div className="max-w-md w-full bg-white rounded-3xl shadow-xl overflow-hidden p-8 text-center border border-slate-200">
+            <div className="w-20 h-20 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">
+              <Trophy className="w-10 h-10" />
+            </div>
+            <h2 className="text-3xl font-bold text-slate-800 mb-2">Exam Result</h2>
+            <div className="text-6xl font-black text-indigo-600 mb-6">{score} <span className="text-2xl text-slate-300">/ 100</span></div>
+            <div className="grid grid-cols-2 gap-4 mb-8">
+              <div className="bg-slate-50 p-4 rounded-2xl">
+                <p className="text-slate-400 text-xs uppercase font-bold tracking-widest mb-1">Incorrect</p>
+                <p className="text-2xl font-bold text-red-500">{wrongQuestions.length}</p>
+              </div>
+              <div className="bg-slate-50 p-4 rounded-2xl">
+                <p className="text-slate-400 text-xs uppercase font-bold tracking-widest mb-1">Time</p>
+                <p className="text-2xl font-bold text-slate-700">{formatTime(timer)}</p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <button onClick={() => { setCurrentQIndex(0); setView('review'); }} className="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+                <RotateCcw className="w-5 h-5" /> Review Answers
+              </button>
+              <button onClick={exportWrongAnswersPDF} disabled={!isJsPdfLoaded || isGeneratingPdf} className={`w-full bg-white border border-indigo-200 text-indigo-600 p-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 ${(isJsPdfLoaded && !isGeneratingPdf) ? 'hover:bg-indigo-50' : 'opacity-50 cursor-not-allowed'}`}>
+                {isGeneratingPdf ? (<><Loader2 className="w-5 h-5 animate-spin" /> Generating PDF...</>) : (<><Download className="w-5 h-5" /> {isJsPdfLoaded ? 'Export Wrong Note (PDF)' : 'Loading PDF Library...'}</>)}
+              </button>
+              <button onClick={() => setView('main')} className="w-full text-slate-400 font-medium p-4 hover:text-slate-600">Return to Menu</button>
+            </div>
+          </div>
+        </div>
+      );
+
+      const ReviewView = () => {
+        const q = currentSet.questions[currentQIndex];
+        const userAns = selectedAnswers[currentQIndex];
+        const isCorrect = userAns === q.answer;
+        return (
+          <div className="flex h-screen bg-white">
+            <div className="flex-1 flex flex-col relative">
+              <div className="p-4 flex items-center justify-between border-b border-slate-100">
+                <button onClick={() => setView('result')} className="text-slate-400 hover:text-indigo-600 flex items-center gap-1 font-semibold">
+                  <ChevronLeft className="w-5 h-5" /> Back to result
+                </button>
+                <span className="text-slate-800 font-bold">Review Mode</span>
+                <div className="w-24"></div>
+              </div>
+              <div className="flex-1 overflow-y-auto p-8 md:p-12 lg:p-20">
+                <div className="max-w-3xl mx-auto">
+                  <div className="flex items-center gap-2 mb-4">
+                    {isCorrect ? (
+                      <span className="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full text-sm font-bold"><CheckCircle2 className="w-4 h-4" /> Correct</span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-red-600 bg-red-50 px-3 py-1 rounded-full text-sm font-bold"><AlertCircle className="w-4 h-4" /> Incorrect</span>
+                    )}
+                  </div>
+                  <h2 className="text-2xl font-bold text-slate-800 mb-10 leading-tight">{q.question}</h2>
+                  <div className="space-y-4 mb-10">
+                    {q.options.map((opt, idx) => {
+                      let statusClass = 'border-slate-100 text-slate-600';
+                      let icon = <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center text-sm font-bold">{idx + 1}</div>;
+                      if (idx === q.answer) {
+                        statusClass = 'border-emerald-500 bg-emerald-50 text-emerald-900 ring-2 ring-emerald-100';
+                        icon = <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center"><CheckCircle2 className="w-5 h-5" /></div>;
+                      } else if (idx === userAns && !isCorrect) {
+                        statusClass = 'border-red-400 bg-red-50 text-red-900';
+                        icon = <div className="w-8 h-8 rounded-lg bg-red-500 text-white flex items-center justify-center"><X className="w-5 h-5" /></div>;
+                      }
+                      return <div key={idx} className={`p-5 rounded-2xl border-2 flex items-center gap-4 ${statusClass}`}>{icon}<span className="text-lg">{opt}</span></div>;
+                    })}
+                  </div>
+                  <div className="bg-indigo-50 p-6 rounded-3xl border border-indigo-100">
+                    <div className="flex items-center gap-2 text-indigo-600 font-bold mb-3"><Lightbulb className="w-5 h-5" /> Explanation</div>
+                    <p className="text-indigo-900 leading-relaxed">{q.explanation}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-8 border-t border-slate-50 flex justify-between max-w-3xl mx-auto w-full">
+                <button disabled={currentQIndex === 0} onClick={() => setCurrentQIndex(prev => prev - 1)} className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-slate-400 hover:text-indigo-600 disabled:opacity-30"><ChevronLeft className="w-5 h-5" /> Previous</button>
+                <button disabled={currentQIndex === currentSet.questions.length - 1} onClick={() => setCurrentQIndex(prev => prev + 1)} className="flex items-center gap-2 bg-indigo-50 text-indigo-600 px-8 py-3 rounded-xl font-bold hover:bg-indigo-100 transition-all disabled:opacity-30">Next <ChevronRight className="w-5 h-5" /></button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const GlossaryView = () => (
+        <div className="min-h-screen bg-slate-50 p-6 flex flex-col items-center">
+          <div className="max-w-3xl w-full">
+            <button onClick={() => setView('main')} className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 mb-6 transition-colors font-semibold"><ChevronLeft className="w-5 h-5" /> Back to menu</button>
+            <h2 className="text-3xl font-bold text-slate-800 mb-8 flex items-center gap-3"><FileText className="w-8 h-8 text-indigo-600" /> English Glossary</h2>
+            <div className="grid gap-4">
+              {vocabulary.map((item, idx) => (
+                <div key={idx} className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:border-indigo-200 transition-all">
+                  <h3 className="text-xl font-bold text-indigo-600 mb-2">{item.term}</h3>
+                  <p className="text-slate-600 leading-relaxed">{item.definition}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+
+      const FlashcardView = () => {
+        const card = vocabulary[flashcardIndex];
+        return (
+          <div className="min-h-screen bg-slate-50 p-6 flex flex-col items-center justify-center">
+            <div className="max-w-md w-full">
+              <button onClick={() => setView('main')} className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 mb-10 transition-colors font-semibold mx-auto w-fit"><ChevronLeft className="w-5 h-5" /> Back to menu</button>
+              <div className="perspective-1000 w-full h-80 cursor-pointer" onClick={() => setIsFlipped(!isFlipped)}>
+                <div className={`relative w-full h-full transition-all duration-500 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+                  <div className="absolute inset-0 bg-white rounded-3xl shadow-xl flex flex-col items-center justify-center p-8 border border-slate-100 backface-hidden">
+                    <p className="text-indigo-600 font-bold mb-4 uppercase text-xs tracking-widest">Economic Term</p>
+                    <h3 className="text-3xl font-black text-slate-800 text-center">{card.term}</h3>
+                    <p className="mt-12 text-slate-300 text-sm italic">Click to flip</p>
+                  </div>
+                  <div className="absolute inset-0 bg-indigo-600 rounded-3xl shadow-xl flex flex-col items-center justify-center p-8 text-white rotate-y-180 backface-hidden">
+                    <p className="text-indigo-200 font-bold mb-4 uppercase text-xs tracking-widest">Definition</p>
+                    <p className="text-xl text-center leading-relaxed font-medium">{card.definition}</p>
+                    <p className="mt-8 text-indigo-400 text-sm italic">Click to flip</p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-10 flex items-center justify-between">
+                <button disabled={flashcardIndex === 0} onClick={() => { setFlashcardIndex(prev => prev - 1); setIsFlipped(false); }} className="p-4 bg-white rounded-full shadow-md text-slate-400 hover:text-indigo-600 disabled:opacity-30"><ChevronLeft className="w-6 h-6" /></button>
+                <span className="text-slate-500 font-bold">{flashcardIndex + 1} / {vocabulary.length}</span>
+                <button disabled={flashcardIndex === vocabulary.length - 1} onClick={() => { setFlashcardIndex(prev => prev + 1); setIsFlipped(false); }} className="p-4 bg-white rounded-full shadow-md text-slate-400 hover:text-indigo-600 disabled:opacity-30"><ChevronRight className="w-6 h-6" /></button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <div className="font-sans antialiased text-slate-900 overflow-x-hidden">
+          {view === 'main' && <MainMenu />}
+          {view === 'test_select' && <TestSelect />}
+          {view === 'test' && currentSet && <TestView />}
+          {view === 'result' && currentSet && <ResultView />}
+          {view === 'review' && currentSet && <ReviewView />}
+          {view === 'glossary' && <GlossaryView />}
+          {view === 'flashcards' && <FlashcardView />}
+
+          <div style={{ position: 'absolute', top: '-10000px', left: '-10000px', width: '1600px', zIndex: -100 }}>
+            {Array.from({ length: Math.ceil(wrongQuestions.length / 2) }).map((_, pageIdx) => {
+              const pageQuestions = wrongQuestions.slice(pageIdx * 2, pageIdx * 2 + 2);
+              return (
+                <div key={pageIdx} className="pdf-page-render bg-slate-50 p-12 flex flex-col" style={{ width: '1600px', height: '1131px' }}>
+                  <div className="flex justify-between items-center mb-8 border-b border-slate-200 pb-4">
+                    <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2"><BookOpen className="w-8 h-8 text-indigo-600" /> AP Microeconomics Review</h2>
+                    <span className="text-slate-500 font-medium text-xl">Incorrect Answer Note - Page {pageIdx + 1}</span>
+                  </div>
+                  <div className="flex-1 grid grid-cols-2 gap-8 h-full">
+                    {pageQuestions.map((q, localIdx) => {
+                      const globalIdx = pageIdx * 2 + localIdx;
+                      const userAns = q.userSelection;
+                      return (
+                        <div key={globalIdx} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col h-full">
+                          <div className="flex items-center gap-2 mb-6">
+                            <span className="flex items-center gap-1 text-red-600 bg-red-50 px-4 py-2 rounded-full text-base font-bold"><AlertCircle className="w-5 h-5" /> Incorrect</span>
+                            <span className="text-slate-400 font-medium ml-auto">Question {globalIdx + 1}</span>
+                          </div>
+                          <h2 className="text-xl font-bold text-slate-800 mb-8 leading-tight">{q.question}</h2>
+                          <div className="space-y-3 mb-8">
+                            {q.options.map((opt, optIdx) => {
+                              let statusClass = 'border-slate-100 text-slate-600';
+                              let icon = <div className="w-6 h-6 rounded-md bg-slate-50 text-slate-400 flex items-center justify-center text-xs font-bold">{optIdx + 1}</div>;
+                              if (optIdx === q.answer) {
+                                statusClass = 'border-emerald-500 bg-emerald-50 text-emerald-900 ring-2 ring-emerald-100';
+                                icon = <div className="w-6 h-6 rounded-md bg-emerald-500 text-white flex items-center justify-center"><CheckCircle2 className="w-4 h-4" /></div>;
+                              } else if (optIdx === userAns) {
+                                statusClass = 'border-red-400 bg-red-50 text-red-900';
+                                icon = <div className="w-6 h-6 rounded-md bg-red-500 text-white flex items-center justify-center"><X className="w-4 h-4" /></div>;
+                              }
+                              return <div key={optIdx} className={`p-4 rounded-2xl border-2 flex items-center gap-3 ${statusClass}`}>{icon}<span className="text-base">{opt}</span></div>;
+                            })}
+                          </div>
+                          <div className="bg-indigo-50 p-5 rounded-2xl border border-indigo-100 mt-auto">
+                            <div className="flex items-center gap-2 text-indigo-600 font-bold mb-2 text-base"><Lightbulb className="w-5 h-5" /> Explanation</div>
+                            <p className="text-indigo-900 leading-relaxed text-base">{q.explanation}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
