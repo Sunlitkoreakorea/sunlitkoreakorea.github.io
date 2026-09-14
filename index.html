@@ -1,14 +1,206 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=preview.html">
-  <title>Home</title>
-  <script>
-    window.location.replace("preview.html");
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sunlit Korea — Projects</title>
+<style>
+  :root{
+    --bg:#f7f6f3;
+    --surface:#ffffff;
+    --border:#e6e3dc;
+    --text:#1c1a17;
+    --muted:#6b6558;
+    --accent:#b45309;
+    --accent-soft:#fdf0e3;
+    --shadow: 0 1px 2px rgba(28,26,23,0.04), 0 8px 24px rgba(28,26,23,0.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#15130f;
+      --surface:#1f1c17;
+      --border:#332e26;
+      --text:#f2ede4;
+      --muted:#a89e8c;
+      --accent:#e0975a;
+      --accent-soft:#2b2118;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Noto Sans KR", Arial, sans-serif;
+    padding: 64px 20px 80px;
+  }
+  .wrap{
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  header{
+    margin-bottom: 48px;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  h1{
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.25;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  header p{
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 60ch;
+  }
+  h2.section-title{
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 16px;
+    padding-top: 8px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 44px;
+  }
+  @media (max-width: 620px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+  a.card{
+    display:flex;
+    flex-direction:column;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 20px 18px;
+    text-decoration:none;
+    color: inherit;
+    box-shadow: var(--shadow);
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  a.card:hover{
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+  .card-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+  }
+  .card-title{
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .arrow{
+    color: var(--muted);
+    font-size: 16px;
+    flex-shrink:0;
+  }
+  .card-desc{
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .card-tag{
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  footer{
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  footer a{ color: var(--muted); }
+</style>
 </head>
 <body>
-  <a href="preview.html">preview.html로 이동</a>
+  <div class="wrap">
+    <header>
+      <span class="eyebrow">Sunlit Korea</span>
+      <h1>배포한 프로젝트 모음</h1>
+      <p>이 계정에서 만들어 배포한 웹앱들을 한 곳에서 바로 접근할 수 있도록 정리한 페이지입니다.</p>
+    </header>
+
+    <h2 class="section-title">학습 도구</h2>
+    <div class="grid">
+      <a class="card" href="https://sunlitkoreakorea.github.io/aplang-vocabulary/">
+        <div class="card-top">
+          <span class="card-title">AP Lang Vocabulary</span>
+          <span class="arrow">↗</span>
+        </div>
+        <div class="card-desc">영어 정의·한국어 뜻·예문으로 AP Lang 시험 대비 어휘를 학습</div>
+      </a>
+
+      <a class="card" href="https://sunlitkoreakorea.github.io/ws-vocabulary/">
+        <div class="card-top">
+          <span class="card-title">WS Vocabulary</span>
+          <span class="arrow">↗</span>
+        </div>
+        <div class="card-desc">33세트 824단어를 학습·오답학습·테스트·카드 방식으로 암기</div>
+      </a>
+
+      <a class="card" href="https://sunlitkoreakorea.github.io/cell-biology-flashcards/">
+        <div class="card-top">
+          <span class="card-title">Cell Biology Flashcards</span>
+          <span class="arrow">↗</span>
+        </div>
+        <div class="card-desc">강의노트를 카드·매칭 게임으로 복습하는 세포생물학 학습 도구</div>
+      </a>
+
+      <a class="card" href="https://sunlitkoreakorea.github.io/preview.html">
+        <div class="card-top">
+          <span class="card-title">AP Microeconomics Study App</span>
+          <span class="arrow">↗</span>
+        </div>
+        <div class="card-desc">AP 미시경제학 시험 대비용 개념 학습 앱</div>
+      </a>
+    </div>
+
+    <h2 class="section-title">유틸리티</h2>
+    <div class="grid">
+      <a class="card" href="https://sunlitkoreakorea.github.io/kmla-timetable/">
+        <div class="card-top">
+          <span class="card-title">KMLA Timetable</span>
+          <span class="arrow">↗</span>
+        </div>
+        <div class="card-desc">수강신청 결과로 개인 시간표 자동 생성, 엑셀/배경화면 이미지로 내보내기</div>
+      </a>
+
+      <a class="card" href="https://github.com/Sunlitkoreakorea/magi">
+        <div class="card-top">
+          <span class="card-title">MAGI</span>
+          <span class="card-tag">GitHub</span>
+        </div>
+        <div class="card-desc">세 개의 Claude 에이전트가 서로 다른 관점으로 과제를 수행하고 교차검토·통합하는 프레임워크</div>
+      </a>
+    </div>
+
+    <footer>
+      <a href="https://github.com/Sunlitkoreakorea">github.com/Sunlitkoreakorea</a>
+    </footer>
+  </div>
 </body>
 </html>
